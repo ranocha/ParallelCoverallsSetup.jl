@@ -1,10 +1,12 @@
 name: CI
+
 on:
   - push
   - pull_request
+
 jobs:
   test:
-    name: Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ matrix.arch }} - ${{ github.event_name }}
+    name: ${{ matrix.os }}-${{ matrix.arch }}-${{ github.event_name }}-Julia${{ matrix.version }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -73,4 +75,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
-      - run: echo "Finished testing Trixi"
+      - run: echo "Finished testing"
