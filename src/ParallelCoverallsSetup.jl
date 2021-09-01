@@ -38,7 +38,6 @@ function i_will_throw()
   mat = rand(10, 10)
   y = mat * x
   @assert y === x
-  return y
 end
 
 end # module
