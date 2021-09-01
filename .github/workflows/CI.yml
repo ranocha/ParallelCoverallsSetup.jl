@@ -81,10 +81,16 @@ jobs:
       - run: ls -R
       # Merge lcov files and upload result to Coveralls
       - run: sudo apt install lcov
-      - run: find ./ -name lcov-*.info -exec echo -a {} \; | xargs lcov -o ./lcov_full.info
+      - run: find ./ -name lcov-*.info -exec echo -a {} \; | xargs lcov -o ./lcov.info
       - uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ./lcov_full.info
+          path-to-lcov: ./lcov.info
+          flag-name: run-${{ github.run_id }}
+          parallel: true
+      - uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true
       # That's it
       - run: echo "Finished testing"
