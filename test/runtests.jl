@@ -2,6 +2,7 @@ using ParallelCoverallsSetup
 using Test
 
 @testset "ParallelCoverallsSetup.jl" begin
-    @test_nowarn foo()
+    @test_nowarn i_am_fully_tested()
+    @test_nowarn i_am_partially_tested(1)
     @test_throws AssertionError i_will_throw()
 end
