@@ -1,8 +1,8 @@
 module ParallelCoverallsSetup
 
-export foo, i_will_throw
+export i_am_partially_tested, i_am_fully_tested, i_am_not_tested, i_will_throw
 
-function i_am_fully_tested()
+function i_am_partially_tested()
   local val::Int
 
   if Sys.islinux()
@@ -18,6 +18,11 @@ function i_am_fully_tested()
   return val
 end
 
+function i_am_fully_tested()
+  val = rand()
+  return val
+end
+
 
 function i_am_not_tested(x)
   if x == 1
@@ -25,15 +30,6 @@ function i_am_not_tested(x)
   end
   
   return "x is not one"
-end
-
-
-function i_am_partially_tested(x)
-  if x == 1
-    return "x is one"
-  else
-    return "x is not one"
-  end
 end
 
 
