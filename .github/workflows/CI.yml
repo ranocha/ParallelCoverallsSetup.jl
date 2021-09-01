@@ -55,12 +55,19 @@ jobs:
       # https://github.com/trixi-framework/Trixi.jl/issues/691
       # https://github.com/coverallsapp/github-action/issues/47
       # https://github.com/coverallsapp/github-action/issues/67
-      - uses: coverallsapp/github-action@master
+      #- uses: coverallsapp/github-action@master
+      #  with:
+      #    github-token: ${{ secrets.GITHUB_TOKEN }}
+      #    flag-name: run-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}-${{ github.run_id }}
+      #    parallel: true
+      #    path-to-lcov: ./lcov.info
+      - shell: bash
+        run: |
+          cp ./lcov.info ./lcov-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}.info
+      - uses: actions/upload-artifact@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          flag-name: run-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}-${{ github.run_id }}
-          parallel: true
-          path-to-lcov: ./lcov.info
+          name: lcov-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}
+          path: ./lcov-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}.info
 
   finish:
     needs: test
@@ -70,9 +77,19 @@ jobs:
       # https://github.com/trixi-framework/Trixi.jl/issues/691
       # https://github.com/coverallsapp/github-action/issues/47
       # https://github.com/coverallsapp/github-action/issues/67
-      - name: Coveralls Finished
-        uses: coverallsapp/github-action@master
+      #- name: Coveralls Finished
+      #  uses: coverallsapp/github-action@master
+      #  with:
+      #    github-token: ${{ secrets.GITHUB_TOKEN }}
+      #    parallel-finished: true
+      # Download all artifacts
+      - uses: actions/download-artifact@v2
+      - run: ls -R
+      # Merge lcov files and upload result to Coveralls
+      - run: find project -name lcov-*.info -exec echo -a {} \; | xargs lcov -o ./lcov_full.info
+      - uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel-finished: true
+          path-to-lcov: ./lcov_full.info
+      # That's it
       - run: echo "Finished testing"
