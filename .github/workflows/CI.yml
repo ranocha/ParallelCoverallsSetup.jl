@@ -86,11 +86,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./lcov.info
-          flag-name: run-${{ github.run_id }}
-          parallel: true
-      - uses: coverallsapp/github-action@master
+      - uses: actions/upload-artifact@v2
         with:
-          github-token: ${{ secrets.github_token }}
-          parallel-finished: true
+          name: full_coverage
+          path: ./lcov.info
       # That's it
       - run: echo "Finished testing"
