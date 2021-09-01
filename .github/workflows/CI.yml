@@ -94,7 +94,7 @@ jobs:
       - uses: actions/download-artifact@v2
       - run: ls -R
       # Merge lcov files and upload result to Coveralls
-      - run: find project -name lcov-*.info -exec echo -a {} \; | xargs lcov -o ./lcov_full.info
+      - run: find ./ -name lcov-*.info -exec echo -a {} \; | xargs lcov -o ./lcov_full.info
       - uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
