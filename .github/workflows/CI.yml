@@ -83,7 +83,7 @@ jobs:
       #- run: sudo apt install lcov
       #- run: find ./ -name lcov-*.info -exec echo -a {} \; | xargs lcov -o ./lcov.info
       - run: npm i lcov-result-merger
-      - run: lcov-result-merger './lcov-*/lcov-*.info' './lcov.info'
+      - run: ./node_modules/.bin/lcov-result-merger './lcov-*/lcov-*.info' './lcov.info'
       - uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
