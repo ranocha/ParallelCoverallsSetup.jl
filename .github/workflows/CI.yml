@@ -82,7 +82,7 @@ jobs:
       # Merge lcov files and upload result to Coveralls
       #- run: sudo apt install lcov
       #- run: find ./ -name lcov-*.info -exec echo -a {} \; | xargs lcov -o ./lcov.info
-      - name: Install extra dependency on main branch
+      - name: Merge lcov files and upload result to Coveralls
         shell: julia --color=yes --project=. {0}
         run: |
           using Pkg
@@ -95,10 +95,11 @@ jobs:
           coverage = merge_coverage_counts(coverage)
           @show covered_lines, total_lines = get_summary(coverage)
           LCOV.writefile("./lcov.info", coverage)
-      - uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ./lcov.info
+          Coveralls.submit(coverage)
+      #- uses: coverallsapp/github-action@master
+      #  with:
+      #    github-token: ${{ secrets.GITHUB_TOKEN }}
+      #    path-to-lcov: ./lcov.info
       - uses: actions/upload-artifact@v2
         with:
           name: full_coverage
