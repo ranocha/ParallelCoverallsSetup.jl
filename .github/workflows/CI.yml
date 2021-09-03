@@ -76,13 +76,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Manual approach for Coveralls  (see comment above)
+      - uses: actions/checkout@v2
       # Download all artifacts (and list files for debugging)
       - uses: actions/download-artifact@v2
       - run: ls -R
       # Merge lcov files and upload result to Coveralls
       #- run: sudo apt install lcov
       #- run: find ./ -name lcov-*.info -exec echo -a {} \; | xargs lcov -o ./lcov.info
-      - uses: actions/checkout@v2
       - name: Merge lcov files and upload result to Coveralls
         shell: julia --color=yes --project=. {0}
         run: |
