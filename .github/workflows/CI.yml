@@ -82,8 +82,19 @@ jobs:
       # Merge lcov files and upload result to Coveralls
       #- run: sudo apt install lcov
       #- run: find ./ -name lcov-*.info -exec echo -a {} \; | xargs lcov -o ./lcov.info
-      - run: npm i lcov-result-merger
-      - run: ./node_modules/.bin/lcov-result-merger './lcov-*/lcov-*.info' './lcov.info'
+      - name: Install extra dependency on main branch
+        shell: julia --color=yes --project=. {0}
+        run: |
+          using Pkg
+          Pkg.add("Coverage")
+          using Coverage
+          coverage = LCOV.readfolder(".")
+          for cov in coverage
+            cov.filename = replace(cov.filename, "\\" => "/")
+          end
+          coverage = merge_coverage_counts(coverage)
+          @show covered_lines, total_lines = get_summary(coverage)
+          LCOV.writefile("./lcov.info", coverage)
       - uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
