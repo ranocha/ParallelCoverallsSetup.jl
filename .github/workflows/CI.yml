@@ -84,9 +84,10 @@ jobs:
       #- run: sudo apt install lcov
       #- run: find ./ -name lcov-*.info -exec echo -a {} \; | xargs lcov -o ./lcov.info
       - name: Merge lcov files and upload result to Coveralls
-        shell: julia --color=yes --project=. {0}
+        shell: julia --color=yes {0}
         run: |
           using Pkg
+          Pkg.activate(temp=true)
           Pkg.add("Coverage")
           using Coverage
           coverage = LCOV.readfolder(".")
